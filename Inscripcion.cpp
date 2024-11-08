@@ -15,36 +15,78 @@ bool Inscripcion::verificarDisponibilidad(Candidato cand){
     return true;
 }
 
+
 void Inscripcion::Registrar() {
-    Candidato nuevo; string nuevaCedula, nuevoNombre, nuevoApellido; int idNuevoPartido;
+    int cantidadCandidatos;
+    cout << "Registro de Candidatos" << endl;
+    cout << "Ingrese la cantidad de candidatos a registrar: ";
+    cin >> cantidadCandidatos;
+    cin.ignore(); // Limpiar el buffer
 
-    cout << "\tRegistrando Candidato  ------------ \n ";
+    for (int i = 0; i < cantidadCandidatos; i++) {
+        string cedula, nombre, apellido;
+        int partido;
 
-    cout<<"Cedula:"; cin>>nuevaCedula; cin.ignore();
-    nuevo.setCedula(nuevaCedula);
+        cout << "\nRegistro del Candidato " << i + 1 << endl;
+        cout << "Ingrese la cédula: ";
+        getline(cin, cedula);
 
-    cout<<"Nombre:"; getline(cin, nuevoNombre);
-    nuevo.setNombre(nuevoNombre);
+        cout << "Ingrese el nombre: ";
+        getline(cin, nombre);
 
-    cout<<"Apellido:"; getline(cin, nuevoApellido);
-    nuevo.setApellido(nuevoApellido);
+        cout << "Ingrese el apellido: ";
+        getline(cin, apellido);
 
-    cout<<"ID del partido:"; cin>>idNuevoPartido;
-    nuevo.setIdPartido(idNuevoPartido);
+        cout << "Ingrese el partido político: ";
+        cin >> partido;
 
-    // Establece el estatus como activo al crear un nuevo candidato
-    nuevo.setStatus("Activo");
+        // Crear un objeto Candidato y agregarlo a la lista
+        Candidato candidato(cedula, nombre, apellido, partido);
+      if(verificarDisponibilidad(candidato)) {
+        candidatos.InsComienzo(candidato);
+        
+        
+      }
+        // Mostrar la lista de candidatos registrados
+    cout << "\nLista de Candidatos Registrados:" << endl;
+    nodo<Candidato>* p = candidatos.ObtPrimero();
+    while (p != nullptr) {
+        candidatos.ObtInfo(p).mostrarInformacion();
+        cout << endl;
+        p = candidatos.ObtProx(p); // Aquí se corrigió el nombre del método
+    }
+    }
 
-    if(verificarDisponibilidad(nuevo)) {
-        candidatos.InsertarNodoCola(nuevo);
-        partidos[nuevo.getIdPartido()].InsertarNodoCola(nuevo);
-        candidatosPorPartido[nuevo.getIdPartido()-1]++;
+// void Inscripcion::Registrar() {
+//     Candidato nuevo; string nuevaCedula, nuevoNombre, nuevoApellido; int idNuevoPartido;
 
-        cout << "\nCandidato registrado exitosamente:\n";
-        nuevo.mostrarInformacion();
+//     cout << "\tRegistrando Candidato  ------------ \n ";
 
-    } else cout << "\nFallo al registrar el candidato\n";
-}
+//     cout<<"Cedula:"; cin>>nuevaCedula; cin.ignore();
+//     nuevo.setCedula(nuevaCedula);
+
+//     cout<<"Nombre:"; getline(cin, nuevoNombre);
+//     nuevo.setNombre(nuevoNombre);
+
+//     cout<<"Apellido:"; getline(cin, nuevoApellido);
+//     nuevo.setApellido(nuevoApellido);
+
+//     cout<<"ID del partido:"; cin>>idNuevoPartido;
+//     nuevo.setIdPartido(idNuevoPartido);
+
+//     // Establece el estatus como activo al crear un nuevo candidato
+//     nuevo.setStatus("Activo");
+
+//     if(verificarDisponibilidad(nuevo)) {
+//         candidatos.InsertarNodoCola(nuevo);
+//         partidos[nuevo.getIdPartido()].InsertarNodoCola(nuevo);
+//         candidatosPorPartido[nuevo.getIdPartido()]++;
+
+//         cout << "\nCandidato registrado exitosamente:\n";
+//         nuevo.mostrarInformacion();
+
+//     } else cout << "\nFallo al registrar el candidato\n";
+// }
 
 void Inscripcion::Eliminar(Candidato cand) {
     std::cout << "\n\nCandidato Eliminado:\n";
@@ -195,6 +237,7 @@ void Inscripcion::ReporteGeneral() {
         cout << "========================" << endl;
     }
 }
+    }
 
 /*
 void Inscripcion::MostrarCandidatosPorPartido(string buscarPartido) {
@@ -232,4 +275,5 @@ void Inscripcion::MostrarCandidatosPorPartido(string buscarPartido) {
         cout << "No hay candidatos que pertenezcan al partido " << buscarPartido << "." << endl;
     }
 }
+
 */
